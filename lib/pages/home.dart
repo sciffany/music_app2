@@ -40,6 +40,8 @@ class _ScrollUpWidgetState extends State<ScrollUpWidget> {
   @override
   void initState() {
     super.initState();
+    Track instance = Track();
+    instance.getTrackItems();
   }
 
   List<Track> tracks = [

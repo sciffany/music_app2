@@ -21,7 +21,7 @@ class _AudioPageState extends State<AudioPage> {
   @override
   void initState() {
     super.initState();
-    play();
+//    play();
   }
 
   @override
@@ -30,7 +30,7 @@ class _AudioPageState extends State<AudioPage> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.blue,
+            Colors.green,
             Colors.blueGrey,
             Colors.black,
           ],
