@@ -1,11 +1,13 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:music_app2/services/Track.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class AudioPage extends StatefulWidget {
   final Track track;
+  final Function onComplete;
+  final AudioPlayer audioPlayer;
 
-  AudioPage({this.track});
+  AudioPage({this.track, this.onComplete, this.audioPlayer});
 
   @override
   _AudioPageState createState() => _AudioPageState();
@@ -13,13 +15,13 @@ class AudioPage extends StatefulWidget {
 
 class _AudioPageState extends State<AudioPage> {
 
-  bool playing = false;
+  bool playing = true;
 
-  final AudioPlayer audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
+    play();
   }
 
   @override
@@ -55,18 +57,9 @@ class _AudioPageState extends State<AudioPage> {
             onPressed: () {
               if (playing) {
                 pause();
-                setState(() {
-                  playing = false;
-                });
               }
               else {
                 play();
-                audioPlayer.onPlayerCompletion.listen((event) {
-//                  onComplete();
-                });
-                setState(() {
-                  playing = true;
-                });
               }
             },
             child: Icon(
@@ -87,19 +80,25 @@ class _AudioPageState extends State<AudioPage> {
   }
 
   play() async {
-    int result = await audioPlayer.play(widget.track.previewUrl);
-    print(result);
+    int result = await widget.audioPlayer.play(widget.track.previewUrl);
+    widget.audioPlayer.onPlayerCompletion.listen((event) {
+      widget.onComplete();
+    });
     if (result == 1) {
-      // success
+      setState(() {
+        playing = true;
+      });
     } else {
       print("Error playing song");
     }
   }
 
   pause() async {
-    int result = await audioPlayer.pause();
+    int result = await widget.audioPlayer.pause();
     if (result == 1) {
-      // success
+      setState(() {
+        playing = false;
+      });
     } else {
       print("Error pausing song");
     }
