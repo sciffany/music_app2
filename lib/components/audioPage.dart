@@ -13,6 +13,8 @@ class AudioPage extends StatefulWidget {
 
 class _AudioPageState extends State<AudioPage> {
 
+  bool playing = false;
+
   final AudioPlayer audioPlayer = AudioPlayer();
 
   @override
@@ -27,10 +29,21 @@ class _AudioPageState extends State<AudioPage> {
           body: Center(
               child: ElevatedButton(
                 onPressed: () {
-                  play();
+                  if (playing) {
+                    pause();
+                    setState(() {
+                      playing = false;
+                    });
+                  }
+                  else {
+                    play();
+                    setState(() {
+                      playing = true;
+                    });
+                  }
                 },
                 child: Icon(
-                  Icons.play_arrow,
+                  playing? Icons.pause : Icons.play_arrow,
                   color: Colors.white,
                   size: 60.0,
                 ),
