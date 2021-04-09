@@ -42,7 +42,16 @@ class _AudioPageState extends State<AudioPage> {
         ),
       ),
       child: Center(
-          child: ElevatedButton(
+          child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+
+          children: [
+            Text(widget.track.title,
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center),
+            SizedBox(height: 20),
+            ElevatedButton(
             onPressed: () {
               if (playing) {
                 pause();
@@ -61,13 +70,15 @@ class _AudioPageState extends State<AudioPage> {
               }
             },
             child: Icon(
-              playing? Icons.headset_off : Icons.headset,
+              playing? Icons.pause : Icons.play_arrow,
               color: Colors.white,
               size: 80.0,
             ),
             style: ElevatedButton.styleFrom(
                 shape: CircleBorder(), primary: Colors.grey[900]),
           )
+        ]
+      )
       )
 
     );

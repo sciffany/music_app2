@@ -1,6 +1,7 @@
 class Track {
   String previewUrl;
   String imageUrl;
+  String title;
 
-  Track({this.previewUrl, this.imageUrl});
+  Track({this.title, this.previewUrl, this.imageUrl});
 }
