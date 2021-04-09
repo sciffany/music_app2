@@ -1,5 +1,6 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:music_app2/components/audioPage.dart';
+import 'package:music_app2/services/Track.dart';
 
 
 class Home extends StatefulWidget {
@@ -17,10 +18,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home:Scaffold (
-          appBar: AppBar(
-              title: Text("Nooble")
-          ),
+        theme: ThemeData.dark(),
+        home: Scaffold (
           body: ScrollUpWidget()
         )
     );
@@ -34,6 +33,19 @@ class ScrollUpWidget extends StatefulWidget {
 }
 
 class _ScrollUpWidgetState extends State<ScrollUpWidget> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  List<Track> tracks = [
+    Track(previewUrl: "https://p.scdn.co/mp3-preview/1a27a21701dae7a7d76fa24d8016735b4ce6f8b1?cid=774b29d4f13844c495f206cafdad9c86"),
+    Track(previewUrl: "https://p.scdn.co/mp3-preview/54ad4d8bf804ad67418e5551c3d1da3b1b1ae0a1?cid=774b29d4f13844c495f206cafdad9c86"),
+    Track(previewUrl: "https://p.scdn.co/mp3-preview/fc529bd7c299b310b459e9e08afcf5fd6bb9a71f?cid=774b29d4f13844c495f206cafdad9c86"),
+
+  ];
+
   @override
   Widget build(BuildContext context) {
     final PageController controller = PageController(initialPage: 0);
@@ -41,71 +53,8 @@ class _ScrollUpWidgetState extends State<ScrollUpWidget> {
     return PageView(
       scrollDirection: Axis.vertical,
       controller: controller,
-      children: <Widget>[
-        Center(
-          child: Text('First Page'),
-        ),
-        Center(
-          child: Text('Second Page'),
-        ),
-        AudioPage()
-      ],
+      children: tracks.map((track) {return AudioPage(track: track);}).toList(),
     );
   }
 }
-
-
-class AudioPage extends StatefulWidget {
-  @override
-  _AudioPageState createState() => _AudioPageState();
-}
-
-class _AudioPageState extends State<AudioPage> {
-
-  final AudioPlayer audioPlayer = AudioPlayer();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return
-        Scaffold(
-          body: Column(
-            children: [ ElevatedButton(
-              onPressed: () {
-                play();
-              },
-              child: Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 60.0,
-              ),
-              style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(), primary: Colors.deepPurple),
-            )
-          ]
-        )
-      );
-
-  }
-
-  play() async {
-    int result = await audioPlayer.play("https://p.scdn.co/mp3-preview/fc529bd7c299b310b459e9e08afcf5fd6bb9a71f?cid=774b29d4f13844c495f206cafdad9c86");
-    print(result);
-    if (result == 1) {
-      // success
-    }
-  }
-
-  pause() async {
-    int result = await audioPlayer.pause();
-    if (result == 1) {
-      // success
-    }
-  }
-}
-
 
