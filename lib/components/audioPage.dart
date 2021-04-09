@@ -24,34 +24,54 @@ class _AudioPageState extends State<AudioPage> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
-          body: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  if (playing) {
-                    pause();
-                    setState(() {
-                      playing = false;
-                    });
-                  }
-                  else {
-                    play();
-                    setState(() {
-                      playing = true;
-                    });
-                  }
-                },
-                child: Icon(
-                  playing? Icons.pause : Icons.play_arrow,
-                  color: Colors.white,
-                  size: 60.0,
-                ),
-                style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(), primary: Colors.deepPurple),
-              )
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.blue,
+            Colors.blueGrey,
+            Colors.black,
+          ],
+          stops: [
+            0.0,
+            0.2,
+            1.0
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              if (playing) {
+                pause();
+                setState(() {
+                  playing = false;
+                });
+              }
+              else {
+                play();
+                audioPlayer.onPlayerCompletion.listen((event) {
+//                  onComplete();
+                });
+                setState(() {
+                  playing = true;
+                });
+              }
+            },
+            child: Icon(
+              playing? Icons.headset_off : Icons.headset,
+              color: Colors.white,
+              size: 80.0,
+            ),
+            style: ElevatedButton.styleFrom(
+                shape: CircleBorder(), primary: Colors.grey[900]),
           )
-      );
+      )
+
+    );
+//
 
   }
 
@@ -73,6 +93,7 @@ class _AudioPageState extends State<AudioPage> {
       print("Error pausing song");
     }
   }
+
 }
 
 
