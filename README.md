@@ -10,6 +10,7 @@ A Flutter application to listen to songs on your playlist.
 5. Copy and paste token to the .env.example file at the root of the project
 6. Also fill in your user id in the .env.example file
 7. Transfer .env.example contents to .env file
+8. Open the app on Android studio
 
 
 ## Getting Started
