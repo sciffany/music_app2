@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_app2/services/Track.dart';
+import 'package:music_app2/services/track.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class AudioPage extends StatefulWidget {
