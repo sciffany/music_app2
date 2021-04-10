@@ -21,7 +21,7 @@ class _AudioPageState extends State<AudioPage> {
   @override
   void initState() {
     super.initState();
-//    play();
+    play();
   }
 
   @override

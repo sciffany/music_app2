@@ -11,17 +11,30 @@ class Track {
   final String userId = env['USER_ID'];
   Dio dio = Dio();
 
-  Future <List<Track>> getTrackItems() async{
+  Future <List<Track>> getTrackItems(offset) async {
     final String playListId = await getPlaylistId();
-    final response = await dio.get("https://api.spotify.com/v1/playlists/$playListId/tracks",
+    final response = await dio.get("https://api.spotify.com/v1/playlists/$playListId/tracks?limit=2&offset=$offset&market=US",
       options: Options(
         headers: {
           "Authorization": "Bearer $bearerToken", // set content-length
         },
       )
     );
-    print(response.data["items"][0]["track"]["preview_url"]);
-    return [];
+    List<dynamic> playlistItems = response.data["items"];
+    try {
+      List<Track> tracks = playlistItems.map((playlistItem) {
+        Track track = Track(
+            previewUrl: playlistItem["track"]["preview_url"],
+            imageUrl: playlistItem["track"]["album"]["images"][0]["url"],
+            title: playlistItem["track"]["name"]
+        );
+        return track;
+      }).toList();
+      return tracks;
+    } catch (error) {
+      throw ("Parse playlist items error");
+    }
+;
   }
 
   Future<String> getPlaylistId() async {
