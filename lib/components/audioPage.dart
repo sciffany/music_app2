@@ -4,10 +4,11 @@ import 'package:audioplayers/audioplayers.dart';
 
 class AudioPage extends StatefulWidget {
   final Track track;
-  final Function onComplete;
   final AudioPlayer audioPlayer;
+  final Function play;
+  final Function pause;
 
-  AudioPage({this.track, this.onComplete, this.audioPlayer});
+  AudioPage({this.track, this.play, this.pause, this.audioPlayer});
 
   @override
   _AudioPageState createState() => _AudioPageState();
@@ -15,13 +16,11 @@ class AudioPage extends StatefulWidget {
 
 class _AudioPageState extends State<AudioPage> {
 
-  bool playing = true;
-
+  bool isPlaying = true;
 
   @override
   void initState() {
     super.initState();
-    play();
   }
 
   @override
@@ -53,17 +52,20 @@ class _AudioPageState extends State<AudioPage> {
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center),
             SizedBox(height: 20),
+          Image.network(widget.track.imageUrl),
             ElevatedButton(
             onPressed: () {
-              if (playing) {
-                pause();
+              if (isPlaying) {
+                widget.pause();
+                isPlaying = false;
               }
               else {
-                play();
+                widget.play();
+                isPlaying = true;
               }
             },
             child: Icon(
-              playing? Icons.pause : Icons.play_arrow,
+              isPlaying? Icons.pause : Icons.play_arrow,
               color: Colors.white,
               size: 80.0,
             ),
@@ -79,30 +81,6 @@ class _AudioPageState extends State<AudioPage> {
 
   }
 
-  play() async {
-    int result = await widget.audioPlayer.play(widget.track.previewUrl);
-    widget.audioPlayer.onPlayerCompletion.listen((event) {
-      widget.onComplete();
-    });
-    if (result == 1) {
-      setState(() {
-        playing = true;
-      });
-    } else {
-      print("Error playing song");
-    }
-  }
-
-  pause() async {
-    int result = await widget.audioPlayer.pause();
-    if (result == 1) {
-      setState(() {
-        playing = false;
-      });
-    } else {
-      print("Error pausing song");
-    }
-  }
 
 }
 
