@@ -34,7 +34,7 @@ class Track {
     } catch (error) {
       throw ("Parse playlist items error");
     }
-;
+
   }
 
   Future<String> getPlaylistId() async {

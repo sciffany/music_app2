@@ -59,21 +59,34 @@ class _ScrollUpWidgetState extends State<ScrollUpWidget> {
   Widget build(BuildContext context) {
 
     return Column(children:[
-    Expanded(child: PageView.builder(
-      scrollDirection: Axis.vertical,
-      controller: controller,
-      itemCount: loadedTracks.length,
-      itemBuilder: (context, index) {
-        return AudioPage(track: loadedTracks[index],
-                         audioPlayer: audioPlayer,
-                         onComplete: () { if (index<loadedTracks.length)
-                                          {scrollToPage(index+1); } else {
-                                            loadData();
-                                          }
-                                        },
+      Expanded(child:
+      NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollInfo) {
+        if (!isLoading && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+          setState(() {
+            isLoading = true;
+          });
+          loadData();
+        }
+        return true;
+      },
 
-                        );
-            }
+      child: PageView.builder(
+        scrollDirection: Axis.vertical,
+        controller: controller,
+        itemCount: loadedTracks.length,
+        itemBuilder: (context, index) {
+          return AudioPage(track: loadedTracks[index],
+                           audioPlayer: audioPlayer,
+                           onComplete: () { if (index<loadedTracks.length)
+                                            {scrollToPage(index+1); } else {
+                                              loadData();
+                                            }
+                                          },
+
+                          );
+              }
+            )
           )
         ),
         Container(
@@ -87,7 +100,7 @@ class _ScrollUpWidgetState extends State<ScrollUpWidget> {
     );
   }
 
-  loadData() async {
+  Future<bool> loadData() async {
     setState(() {
       isLoading = true;
     });
@@ -100,6 +113,7 @@ class _ScrollUpWidgetState extends State<ScrollUpWidget> {
         }
 
     );
+    return newTracks.length > 0;
 
   }
 }
