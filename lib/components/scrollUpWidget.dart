@@ -4,6 +4,12 @@ import 'package:music_app2/services/track.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class ScrollUpWidget extends StatefulWidget {
+
+  final String username;
+  final String bearerToken;
+
+  ScrollUpWidget({this.username, this.bearerToken});
+
   @override
   _ScrollUpWidgetState createState() => _ScrollUpWidgetState();
 }
@@ -79,7 +85,8 @@ class _ScrollUpWidgetState extends State<ScrollUpWidget> {
       isLoading = true;
     });
 
-    List<Track> newTracks = await trackInstance.getTrackItems(loadedTracks.length);
+    List<Track> newTracks = await trackInstance.getTrackItems(
+                            widget.bearerToken, widget.username, loadedTracks.length);
     setState (
             () {
           loadedTracks = loadedTracks + newTracks;
@@ -93,9 +100,9 @@ class _ScrollUpWidgetState extends State<ScrollUpWidget> {
 
     if (isFirstTimeLoading) {
       play(0);
+      isFirstTimeLoading = false;
     }
 
-    isFirstTimeLoading = false;
   }
 
   play(index) async {

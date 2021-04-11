@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Track {
   String previewUrl;
@@ -7,12 +6,11 @@ class Track {
   String title;
 
   Track({this.title, this.previewUrl, this.imageUrl});
-  final String bearerToken = env['BEARER_TOKEN'];
-  final String userId = env['USER_ID'];
+
   Dio dio = Dio();
 
-  Future <List<Track>> getTrackItems(offset) async {
-    final String playListId = await getPlaylistId();
+  Future <List<Track>> getTrackItems(bearerToken, userId, offset) async {
+    final String playListId = await getPlaylistId(bearerToken, userId);
     final response = await dio.get("https://api.spotify.com/v1/playlists/$playListId/tracks?limit=2&offset=$offset&market=US",
       options: Options(
         headers: {
@@ -37,7 +35,7 @@ class Track {
 
   }
 
-  Future<String> getPlaylistId() async {
+  Future<String> getPlaylistId(bearerToken, userId) async {
     final response = await dio.get("https://api.spotify.com/v1/users/$userId/playlists",
       options: Options(
         headers: {
@@ -51,6 +49,15 @@ class Track {
     } catch (error) {
       throw("Unable to find playlist id");
     }
+  }
 
+  Future<void> login(bearerToken, userId) async {
+    await dio.get("https://api.spotify.com/v1/users/$userId/playlists",
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $bearerToken", // set content-length
+          },
+        )
+    );
   }
 }
